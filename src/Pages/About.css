@@ -1,87 +1,131 @@
 .new-about-main-section {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh; /* Ensure it takes full height */
-    background-color: #f9f9f9;
-    padding: 20px; /* Added padding to avoid content touching the screen edges */
-    box-sizing: border-box; /* Ensure padding is included in height calculation */
-  }
-  
-  .new-about-main-div {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 20px;
-    width: 100%;
-  }
-  
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 60px - 60px);
+  /* Adjusted min-height to account for the navbar and footer height */
+  background-color: #f9f9f9;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.new-about-main-div {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  width: 100%;
+}
+
+.new-about-main-card {
+  width: 90%;
+  max-width: 400px;
+  /* Adjusted max width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 13px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  box-sizing: border-box;
+  margin: 20px;
+  /* Add margin to give space around cards */
+}
+
+.new-about-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.new-about-card-image img {
+  height: 200px;
+  width: 200px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.new-about-card-info {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.new-about-card-icons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.new-about-logo {
+  color: black;
+  font-size: 24px;
+  transition: transform 0.2s;
+}
+
+.new-about-logo:hover {
+  transform: scale(1.1);
+}
+
+/* Media Queries for larger screens */
+@media (min-width: 1200px) {
   .new-about-main-card {
-    width: 100%;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 13px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #fff;
-    box-sizing: border-box; /* Ensure padding is included in height calculation */
+    max-width: 500px;
+    /* Slightly increase max width for large screens */
   }
-  
+
   .new-about-card {
-    display: flex;
+    padding: 30px;
+  }
+
+  .new-about-card-image img {
+    height: 250px;
+    width: 250px;
+  }
+
+  .new-about-logo {
+    font-size: 32px;
+  }
+}
+
+/* Media Queries for very large screens */
+@media (min-width: 1800px) {
+  .new-about-main-card {
+    max-width: 600px;
+  }
+
+  .new-about-card {
+    padding: 40px;
+  }
+
+  .new-about-card-image img {
+    height: 300px;
+    width: 300px;
+  }
+
+  .new-about-logo {
+    font-size: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .new-about-main-div {
     flex-direction: column;
     align-items: center;
-    padding: 20px;
-    box-sizing: border-box; /* Ensure padding is included in height calculation */
   }
-  
+}
+
+@media (max-width: 414px) {
+  .new-about-main-card {
+    width: 90%;
+  }
+
   .new-about-card-image img {
-    height: 200px;
-    width: 200px;
-    object-fit: cover;
-    border-radius: 50%;
+    height: 150px;
+    width: 150px;
   }
-  
-  .new-about-card-info {
-    text-align: center;
-    margin-top: 20px;
-  }
-  
-  .new-about-card-icons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-  }
-  
-  .new-about-logo {
-    color: black;
-    font-size: 24px;
-    transition: transform 0.2s;
-  }
-  
-  .new-about-logo:hover {
-    transform: scale(1.1);
-  }
-  
-  @media (max-width: 768px) {
-    .new-about-main-div {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  
-  @media (max-width: 414px) {
-    .new-about-main-card {
-      width: 90%;
-    }
-  
-    .new-about-card-image img {
-      height: 150px;
-      width: 150px;
-    }
-  }
-  
+}

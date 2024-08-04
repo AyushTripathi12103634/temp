@@ -1,0 +1,95 @@
+.profile-main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 20px;
+}
+
+.profile-content {
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    overflow-x: auto; /* Handle overflow */
+}
+
+.profile-content table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed; /* Prevent table content from overflowing */
+}
+
+.profile-content table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    overflow-wrap: break-word; /* Break long words to avoid overflow */
+}
+
+.profile-content table td span {
+    display: inline-block;
+    width: 100%;
+    border: none;
+    outline: none;
+}
+
+.profile-content table tr:last-child td {
+    border-bottom: none;
+}
+
+.profile-content table td strong {
+    font-weight: 600;
+}
+
+.edit-options {
+    text-align: left;
+    margin-top: 20px;
+}
+
+.edit-options .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.profile-buttons .buttons {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for responsiveness */
+    gap: 10px; /* Space between buttons */
+    justify-content: center; /* Center buttons */
+}
+
+.profile-buttons .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    flex: 1 1 auto; /* Allow buttons to shrink and grow */
+    max-width: 200px; /* Set a max-width to prevent full-width on small screens */
+}
+
+@media (max-width: 768px) {
+    .profile-content {
+        width: 100%;
+    }
+
+    .profile-buttons .btn {
+        width: auto; /* Allow buttons to adjust based on content */
+        max-width: 100%; /* Ensure buttons don't exceed container width */
+    }
+}

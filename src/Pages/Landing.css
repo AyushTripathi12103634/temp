@@ -1,0 +1,134 @@
+.Landing-main-section {
+    height: 100vh;
+    /* Ensure it takes the full viewport height */
+    background-color: #040514;
+    padding: 20px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    /* Prevents scrolling */
+}
+
+.Landing-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #4BC286;
+    font-weight: 800;
+    width: 100%;
+    max-width: 1200px;
+    /* Max width for larger screens */
+}
+
+.Landing-content1,
+.Landing-content2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    margin: 10px 0;
+    /* Spacing between left and right sections */
+}
+
+.Landing-content1 img {
+    width: 80%;
+    /* Reduced size of the gif */
+    max-width: 250px;
+    margin-bottom: 20px;
+    margin-left: 20px;
+    /* Shift gif to the right */
+    border-radius: 15px;
+    /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Shadow */
+    padding: 10px;
+    /* Spacing from all sides */
+    background-color: #1e1e2d;
+    /* Background color for spacing */
+}
+
+.Landing-content2a {
+    margin-bottom: 20px;
+}
+
+.Landing-content2a h1 {
+    color: white;
+    font-size: 5vw;
+    font-weight: 800;
+}
+
+.Landing-content2a p {
+    font-size: 4vw;
+    color: white;
+}
+
+.Landing-content2a img {
+    height: 8vw;
+    margin-left: 10px;
+}
+
+.Landing-content2bButton {
+    margin-bottom: 20px;
+}
+
+.Landing-content2bButton button {
+    background-color: white;
+    color: #040514;
+    border: none;
+    border-radius: 10px;
+    font-size: 4vw;
+    font-weight: 600;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+@media (min-width: 768px) {
+    .Landing-content {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .Landing-content1,
+    .Landing-content2 {
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+        width: 45%;
+        /* Reduced width to add spacing between sections */
+    }
+
+    .Landing-content1 img {
+        max-width: 100%;
+    }
+
+    .Landing-content2a h1 {
+        font-size: 3vw;
+    }
+
+    .Landing-content2a p {
+        font-size: 2vw;
+    }
+
+    .Landing-content2bButton button {
+        font-size: 1.5vw;
+    }
+}
+
+@media (max-width: 768px) {
+    .Landing-content2a h1 {
+        font-size: 7vw;
+    }
+
+    .Landing-content2a p {
+        font-size: 5vw;
+    }
+
+    .Landing-content2bButton button {
+        font-size: 5vw;
+    }
+}
