@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import modeReducer from './ModeSlice.js';
 
-export default configureStore({
-  reducer: {
-    mode: modeReducer,
-  },
+const store = configureStore({
+    reducer: {
+        mode: modeReducer,
+    },
 });
+
+export default store;
