@@ -1,22 +1,52 @@
-import React, {useState} from 'react';
-import "./Chat.css";
-import { useSelector} from "react-redux";
+import React, { useState, useEffect } from 'react';
+import './Chat.css';
+import NavBar from './Navbar.js';
 
-const Chat = () => {
+const Chat = ({ socket, room }) => {
   const [input, setInput] = useState('');
-  const mode = useSelector((state)=>state.mode);
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('message', (message) => {
+        setMessages((prevMessages) => [...prevMessages, message]);
+      });
+    }
+
+    return () => {
+      if (socket) {
+        socket.off('message');
+      }
+    };
+  }, [socket]);
+
+  const sendMessage = () => {
+    if (socket) {
+      socket.emit('message', { room, text: input });
+      setInput('');
+    }
+  };
 
   return (
-    <>
     <div>
-        <div></div>
-        <div>
-            <input className='form-control' placeholder='Enter Message' onChange={(e)=>setInput(e.target.value)}></input>
-            <button className={`btn btn-${mode? 'dark':'light'}`} disabled={input===''}>Send</button>
+      <NavBar />
+      <div className="chat-container">
+        <div className="messages">
+          {messages.map((msg, index) => (
+            <div key={index} className="message">
+              {msg.text}
+            </div>
+          ))}
         </div>
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type your message..."
+        />
+        <button onClick={sendMessage}>Send</button>
+      </div>
     </div>
-    </>
-  )
-}
+  );
+};
 
-export default Chat
+export default Chat;
