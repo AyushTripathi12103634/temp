@@ -28,8 +28,6 @@ const Compiler = ({ socket, room }) => {
   const [currentCommand, setCurrentCommand] = useState('');
 
 
-  let ld = [...lineData];
-
   const editorRef = useRef(null);
   const language_details = Language[CurrentLanguage];
   const isUpdatingRef = useRef(false);
