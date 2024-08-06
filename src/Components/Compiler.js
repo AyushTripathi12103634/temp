@@ -7,14 +7,14 @@ import 'react-toastify/dist/ReactToastify.css';
 import Terminal, { ColorMode, TerminalOutput, TerminalInput } from 'react-terminal-ui';
 
 const Compiler = ({ socket, room }) => {
-  const [code, setCode] = useState('');
+  const [code, setCode] = useState(Language['C# (Mono 6.6.0.161)'].value);
   const [CurrentLanguage, setCurrentLanguage] = useState("C# (Mono 6.6.0.161)");
   const [editortheme, seteditortheme] = useState("vs-dark");
   const [editorwidth, seteditorwidth] = useState("890px");
   const [open, setopen] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
 
-  // Terminal States
+  // Terminal Code
   const [lineData, setLineData] = useState([
     <TerminalOutput key={0}>Welcome to SquadScript Terminal!!!</TerminalOutput>,
     <TerminalOutput key={1}></TerminalOutput>,
@@ -27,20 +27,41 @@ const Compiler = ({ socket, room }) => {
   const [isMultilineInput, setIsMultilineInput] = useState(false);
   const [currentCommand, setCurrentCommand] = useState('');
 
+
+  let ld = [...lineData];
+
   const editorRef = useRef(null);
   const language_details = Language[CurrentLanguage];
+  const isUpdatingRef = useRef(false);
 
   useEffect(() => {
     if (socket) {
-      socket.on('code', (data) => {
-        setCode(data);
-        console.log('Received code update');
+      socket.on('initialize', (initialCode) => {
+        setCode(initialCode);
+        if (editorRef.current) {
+          isUpdatingRef.current = true;
+          editorRef.current.setValue(initialCode);
+          isUpdatingRef.current = false;
+        }
+      });
+
+      socket.on('operation', (operation) => {
+        setCode((prevCode) => {
+          const newCode = applyOperation(prevCode, operation);
+          if (editorRef.current) {
+            isUpdatingRef.current = true;
+            editorRef.current.setValue(newCode);
+            isUpdatingRef.current = false;
+          }
+          return newCode;
+        });
       });
     }
 
     return () => {
       if (socket) {
-        socket.off('code');
+        socket.off('initialize');
+        socket.off('operation');
       }
     };
   }, [socket, room]);
@@ -57,9 +78,12 @@ const Compiler = ({ socket, room }) => {
     }
   };
 
-  const handleCodeChange = (value) => {
-    setCode(value);
-    sendCode(value); // Pass the updated code to sendCode
+  const handleCodeChange = (value, event) => {
+    if (!isUpdatingRef.current) {
+      const operations = createOperations(event);
+      setCode(value);
+      operations.forEach(operation => sendOperation(operation));
+    }
   };
 
   const handlethemechange = (e) => {
@@ -115,10 +139,51 @@ const Compiler = ({ socket, room }) => {
     }
   };
 
-  const sendCode = (code) => {
-    socket.emit('code', { room, code }); // Ensure the format is { room, code }
-    console.log(`Sent code to room: ${room}`);
+  const sendOperation = (operation) => {
+    socket.emit('operation', { room, ...operation });
+  };
 
+  const applyOperation = (doc, operation) => {
+    const { index, text, type } = operation;
+    console.log(`Applying Operation: ${type} at index ${index} with text "${text}"`);
+
+    if (type === 'insert') {
+      doc = doc.slice(0, index) + text + doc.slice(index);
+      console.log(`After Insert: ${doc}`);
+    } else if (type === 'delete') {
+      const endIndex = index + text.length;
+      doc = doc.slice(0, index) + doc.slice(endIndex);
+      console.log(`After Delete: ${doc}`);
+    }
+
+    return doc;
+  };
+
+  const createOperations = (event) => {
+    const { changes } = event;
+    const operations = [];
+
+    changes.forEach(change => {
+      const { range, text } = change;
+      const { startColumn, startLineNumber, endColumn, endLineNumber } = range;
+      const startIndex = editorRef.current.getModel().getOffsetAt({ lineNumber: startLineNumber, column: startColumn });
+      const endIndex = editorRef.current.getModel().getOffsetAt({ lineNumber: endLineNumber, column: endColumn });
+
+      console.log(`Change detected: ${JSON.stringify(change)}`);
+
+      if (startIndex !== endIndex) {
+        const deletedText = code.slice(startIndex, endIndex);
+        operations.push({ index: startIndex, text: deletedText, type: 'delete' });
+        console.log(`Delete operation: ${JSON.stringify({ index: startIndex, text: deletedText, type: 'delete' })}`);
+      }
+
+      if (text) {
+        operations.push({ index: startIndex, text, type: 'insert' });
+        console.log(`Insert operation: ${JSON.stringify({ index: startIndex, text, type: 'insert' })}`);
+      }
+    });
+
+    return operations;
   };
 
   // Terminal Code
@@ -137,7 +202,7 @@ const Compiler = ({ socket, room }) => {
       }
     } else {
       const command = input.trim().toLowerCase();
-      if (command!=="run code, input=") {
+      if (command !== "run code, input=") {
         ld.push(<TerminalInput key={ld.length}>{input}</TerminalInput>);
       }
       if (command === 'run code') {
@@ -155,13 +220,13 @@ const Compiler = ({ socket, room }) => {
           <TerminalOutput key={4}>'run code, input=' starts multi-line input. Type 'exec' to run the code with input.</TerminalOutput>,
           <TerminalOutput key={9}>'clear' will clear the terminal.</TerminalOutput>,
         ]
-      } else if (command!==""){
+      } else if (command !== "") {
         ld.push(<TerminalOutput key={ld.length}>Unrecognized command</TerminalOutput>);
       }
     }
     setLineData(ld);
   }
-  
+
 
   const redBtnClick = () => {
     ld = [];
@@ -189,31 +254,35 @@ const Compiler = ({ socket, room }) => {
       {open ?
         <div>
           <div className='d-flex'>
-            <select onChange={handleCodeChange} className='form-control w-25'>
-              {Object.keys(Language).map((lang) => {
-                return <option key={lang} value={lang}>{lang}</option>
-              })}
+            <select onChange={handleLanguageChange} className='form-control w-25'>
+              {Object.keys(Language).map((lang, index) => (
+                <option key={index} value={lang}>{Language[lang].name}</option>
+              ))}
             </select>
-            <div>
-              <button className="btn btn-success" onClick={() => setShowMenu(!showMenu)}>
-                Actions
+            <select className="form-control w-25 mx-2" value={editortheme} onChange={handlethemechange}>
+              <option value="vs-dark">VS-Dark</option>
+              <option value="vs-light">VS-Light</option>
+              <option value="hc-black">High-contrast Dark</option>
+              <option value="hc-light">High-contrast Light</option>
+            </select>
+            <div className="btn-group">
+              <button
+                type="button"
+                className="btn btn-primary dropdown-toggle"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={() => setShowMenu(!showMenu)}
+              >
+                Options
               </button>
-              {showMenu && (
-                <div className="d-flex" style={{ flexDirection: 'column' }}>
-                  <button className="btn btn-success" onClick={downloadcode}>Download Code</button>
-                  <button className="btn btn-success" onClick={() => document.querySelector('#fileInput').click()}>Upload Code</button>
+              {showMenu &&
+                <div>
+                  <button className="dropdown-item" onClick={downloadcode}>Download Code</button>
+                  <input type="file" className="dropdown-item" onChange={uploadcode} />
                 </div>
-              )}
-              <input type='file' id='fileInput' onChange={uploadcode} style={{ display: 'none' }} />
+              }
             </div>
-            {open ?
-              <button className='btn btn-primary' onClick={() => setopen(!open)}>Terminal</button> :
-              <button className='btn btn-primary' onClick={() => setopen(!open)}>Compiler</button>
-            }
-            <select className={`form-select bg-dark text-light w-25`} onChange={handlethemechange}>
-              <option value="vs-dark">VS-Dark Theme</option>
-              <option value="vs-light">VS-Light Theme</option>
-            </select>
           </div>
           <Editor
             height="50vh"
@@ -271,38 +340,38 @@ const Compiler = ({ socket, room }) => {
               "selectionHighlight": true,
               "showFoldingControls": "mouseover",
               "smoothScrolling": true,
+              "snippetSuggestions": "inline",
               "suggestOnTriggerCharacters": true,
               "wordBasedSuggestions": true,
-              "wordSeparators": "~!@#$%^&*()-=+[{]}|;:'\",.<>/?",
-              "wordWrap": "off",
+              "wordSeparators": "`~!@#$%^&*()-=+[{]}|;:'\",.<>/?",
+              "wordWrap": "on",
               "wordWrapBreakAfterCharacters": "\t})]?|&,;",
               "wordWrapBreakBeforeCharacters": "{([+",
-              "wordWrapBreakObtrusiveCharacters": ".",
               "wordWrapColumn": 80,
               "wordWrapMinified": true,
-              "wrappingIndent": "none"
+              "wrappingIndent": "same"
             }}
           />
-        </div> :
-        <div className="container w-50 h-50">
-          {open ?
-              <button className='btn btn-primary' onClick={() => setopen(!open)}>Terminal</button> :
-              <button className='btn btn-primary' onClick={() => setopen(!open)}>Compiler</button>
-            }
-          <Terminal
-            key={inputKey} // Add key prop here
-            name='Terminal'
-            colorMode={ColorMode.Dark}
-            onInput={onInput}
-            redBtnCallback={redBtnClick}
-            yellowBtnCallback={yellowBtnClick}
-            greenBtnCallback={greenBtnClick}>
-            {lineData}
-          </Terminal>
+          <button onClick={() => setopen(!open)} className="btn btn-secondary" style={{ width: '70%' }}>Show/Hide Terminal</button>
+        </div>
+        :
+        <div>
+          <div className="container">
+            <Terminal
+              key={inputKey} // Add key prop here
+              name='Terminal'
+              colorMode={ColorMode.Dark}
+              onInput={onInput}
+              redBtnCallback={redBtnClick}
+              yellowBtnCallback={yellowBtnClick}
+              greenBtnCallback={greenBtnClick}>
+              {lineData}
+            </Terminal>
+          </div>
+          <button onClick={() => setopen(!open)} className="btn btn-secondary w-100">Show/Hide Editor</button>
         </div>
       }
     </>
-
   );
 };
 
