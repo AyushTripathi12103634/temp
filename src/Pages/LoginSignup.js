@@ -128,24 +128,27 @@ const LoginSignup = () => {
   };
 
   return (
-    <div className="whole-page">
-      <div className="left-container">
+    <div className="loginsignup-whole-page">
+      <div className="loginsignup-left-container">
         <div>
           <h3>Welcome to</h3>
           <h1>SquadScript</h1>
         </div>
       </div>
-      <div className="middle-container">
+      <div className="loginsignup-middle-container">
         <img src={LoginImg} alt="login" />
       </div>
-      <div className="right-container">
-        <div className="card-container">
-          <animated.div className="card back" style={{ transform }}>
-            <div className="form-box">
-              <div className="form-container">
+      <div className="loginsignup-right-container">
+        <div className="loginsignup-card-container">
+          <animated.div
+            className="loginsignup-card loginsignup-back"
+            style={{ transform }}
+          >
+            <div className="loginsignup-form-box">
+              <div className="loginsignup-form-container">
                 <form>
-                  <div className="input-group">
-                    <i className="fas fa-envelope icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-envelope loginsignup-icon"></i>
                     <input
                       type="email"
                       placeholder="Email"
@@ -154,8 +157,8 @@ const LoginSignup = () => {
                       value={loginemail}
                     />
                   </div>
-                  <div className="input-group">
-                    <i className="fas fa-lock icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-lock loginsignup-icon"></i>
                     <input
                       type="password"
                       placeholder="Password"
@@ -167,7 +170,10 @@ const LoginSignup = () => {
                   <button type="submit" onClick={handlelogindetails}>
                     Login
                   </button>
-                  <Link to="/forgot-password" className="forgot-password">
+                  <Link
+                    to="/forgot-password"
+                    className="loginsignup-forgot-password"
+                  >
                     Forgot Password?
                   </Link>
                 </form>
@@ -179,15 +185,15 @@ const LoginSignup = () => {
           </animated.div>
 
           <animated.div
-            className="card front"
+            className="loginsignup-card loginsignup-front"
             style={{ transform: transform.to((t) => `${t} rotateY(180deg)`) }}
           >
-            <div className="form-box">
-              <div className="form-container">
-                <h2 className="form-heading">Sign Up</h2>
+            <div className="loginsignup-form-box">
+              <div className="loginsignup-form-container">
+                <h2 className="loginsignup-form-heading">Sign Up</h2>
                 <form>
-                  <div className="input-group">
-                    <i className="fas fa-user icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-user loginsignup-icon"></i>
                     <input
                       type="text"
                       placeholder="Username"
@@ -196,8 +202,8 @@ const LoginSignup = () => {
                       value={registerusername}
                     />
                   </div>
-                  <div className="input-group">
-                    <i className="fas fa-id-card icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-id-card loginsignup-icon"></i>
                     <input
                       type="text"
                       placeholder="Name"
@@ -206,8 +212,8 @@ const LoginSignup = () => {
                       value={registername}
                     />
                   </div>
-                  <div className="input-group">
-                    <i className="fas fa-envelope icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-envelope loginsignup-icon"></i>
                     <input
                       type="email"
                       placeholder="Email"
@@ -216,8 +222,8 @@ const LoginSignup = () => {
                       value={registeremail}
                     />
                   </div>
-                  <div className="input-group">
-                    <i className="fas fa-lock icon"></i>
+                  <div className="loginsignup-input-group">
+                    <i className="fas fa-lock loginsignup-icon"></i>
                     <input
                       type="password"
                       placeholder="Password"

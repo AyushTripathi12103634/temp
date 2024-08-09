@@ -1,0 +1,230 @@
+/* Base Styles */
+.join-main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensures full height, including footer */
+}
+
+.join-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1; /* Allows this section to take up available space */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.join-left-container,
+.join-right-container {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.join-left-heading h1 {
+  font-weight: 800;
+  margin-bottom: 20px;
+  font-size: 2rem;
+}
+
+.join-left-content {
+  font-weight: 550;
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.join-right-container img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5%;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.joinscreen-form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
+}
+
+.form-control {
+  margin-bottom: 10px;
+}
+
+.create-button,.join-button {
+  background-color: black;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.create-meet {
+  margin-top: 10px;
+}
+
+/* Responsive Styles for Medium Screens (Tablets, Small Laptops) */
+@media (max-width: 1024px) {
+  .join-content {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .join-left-container,
+  .join-right-container {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+  }
+
+  .join-left-heading h1 {
+    font-size: 1.8rem;
+  }
+
+  .join-left-content {
+    font-size: 1rem;
+  }
+
+  .joinscreen-form{
+    /* display: flex; */
+    justify-content: center;
+  }
+  .create-button,.join-button{
+    width: 30%;
+  }
+}
+
+/* Responsive Styles for Small Screens (Large Phones, Small Tablets) */
+@media (max-width: 768px) {
+  .join-left-heading h1 {
+    font-size: 1.5rem;
+  }
+
+  .join-left-content {
+    font-size: 0.9rem;
+  }
+
+  .create-button,.join-button {
+    width: 40%; /* Set width to 60% to keep it decent-sized */
+    padding: 12px;
+    margin: 10px auto; /* Center-align buttons */
+    font-size: 1rem;
+  }
+  .create-meet{
+
+    display: flex;
+    justify-content: center;
+  }
+}
+
+/* Responsive Styles for Extra Small Screens (Mobile Phones) */
+@media (max-width: 480px) {
+  .join-main {
+    padding: 10px;
+  }
+
+  .join-left-heading h1 {
+    font-size: 1.2rem;
+  }
+
+  .join-left-content {
+    font-size: 0.8rem;
+  }
+
+  .joinscreen-form,
+  .create-meet {
+    padding-left: 0;
+  }
+
+  .create-button,.join-button {
+    width: 30%; /* Slightly larger width but still not 100% */
+    font-size: 0.9rem;
+    padding: 10px;
+    margin: 10px auto; /* Center-align buttons */
+  }
+}
+
+/* Responsive Styles for Large Screens (Desktops, Large Laptops) */
+@media (min-width: 1200px) {
+  .join-content {
+    width: 80%;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  .join-left-container,
+  .join-right-container {
+    width: 45%;
+  }
+
+  .join-left-heading h1 {
+    font-size: 2.5rem;
+  }
+
+  .join-left-content {
+    font-size: 1.4rem;
+  }
+
+  .joinscreen-form {
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+
+  .form-control {
+    width: 60%;
+    margin-bottom: 0;
+  }
+
+  .create-button,.join-button {
+    padding: 15px 30px;
+    font-size: 1.1rem;
+  }
+
+  .create-meet {
+    margin-top: 20px;
+  }
+}
+
+/* Responsive Styles for Extra Large Screens (Large Monitors, TVs) */
+@media (min-width: 1600px) {
+  .join-content {
+    width: 70%;
+    max-width: 1400px;
+    margin: auto;
+  }
+
+  .join-left-container,
+  .join-right-container {
+    width: 40%;
+  }
+
+  .join-left-heading h1 {
+    font-size: 3rem;
+  }
+
+  .join-left-content {
+    font-size: 1.6rem;
+  }
+
+  .join-right-container img {
+    max-width: 90%;
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .create-button,.join-button {
+    padding: 20px 40px;
+    font-size: 1.2rem;
+  }
+}
+
+/* Footer styles */
+footer {
+  margin-top: auto; /* Pushes footer to the bottom */
+  background-color: #000;
+  color: #fff;
+  padding: 10px 0;
+  text-align: center;
+  width: 100%;
+}

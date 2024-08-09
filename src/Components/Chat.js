@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Chat.css';
-import NavBar from './Navbar.js';
 
 const Chat = ({ socket, room }) => {
   const [input, setInput] = useState('');
@@ -22,22 +21,22 @@ const Chat = ({ socket, room }) => {
 
   const sendMessage = () => {
     if (socket) {
-      socket.emit('message', { room, text: input });
+      socket.emit('message', { room, text: input, username: localStorage.getItem('username') });
       setInput('');
     }
   };
 
   return (
-    <div>
-      <NavBar />
-      <div className="chat-container">
-        <div className="messages">
-          {messages.map((msg, index) => (
-            <div key={index} className="message">
-              {msg.text}
-            </div>
-          ))}
-        </div>
+    <div className="chat-container">
+      <div className="messages">
+        {messages.map((msg, index) => (
+          <div key={index} className="message">
+            <h6>{msg.username}</h6>
+            <p>{msg.text}</p>
+          </div>
+        ))}
+      </div>
+      <div className="chat-input-container">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}

@@ -1,0 +1,28 @@
+.video {
+    /* Add any other styling you need for the participant view */
+    display: flex;
+    flex-direction: column;
+    /* border: 2px solid red; */
+    /* padding: 10px; */
+    text-align: center;
+    margin: 0 1.5rem;
+    padding: 0;
+  }
+  .video-vc{
+    display: flex;
+  
+    overflow-x: hidden;
+    overflow-y: hidden;
+    object-fit: contain;
+    
+  }
+  .participant-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Adjust the width as needed */
+    gap: 20px; /* Add spacing between participant views */
+  }
+  
+  .vc-main{
+    margin: 0;
+    width: 100vw;
+  }

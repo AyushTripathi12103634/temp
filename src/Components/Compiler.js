@@ -4,7 +4,9 @@ import { saveAs } from 'file-saver';
 import Editor from '@monaco-editor/react';
 import { Bounce, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 import Terminal, { ColorMode, TerminalOutput, TerminalInput } from 'react-terminal-ui';
+import './Compiler.css'
 
 const Compiler = ({ socket, room }) => {
   const [code, setCode] = useState(Language['C# (Mono 6.6.0.161)'].value);
@@ -162,52 +164,95 @@ const Compiler = ({ socket, room }) => {
   const createOperations = (event) => {
     const { changes } = event;
     const operations = [];
-
+  
     changes.forEach(change => {
       const { range, text } = change;
       const { startColumn, startLineNumber, endColumn, endLineNumber } = range;
       const startIndex = editorRef.current.getModel().getOffsetAt({ lineNumber: startLineNumber, column: startColumn });
       const endIndex = editorRef.current.getModel().getOffsetAt({ lineNumber: endLineNumber, column: endColumn });
-
-      console.log(`Change detected: ${JSON.stringify(change)}`);
-
-      if (startIndex !== endIndex) {
-        const deletedText = code.slice(startIndex, endIndex);
-        operations.push({ index: startIndex, text: deletedText, type: 'delete' });
-        console.log(`Delete operation: ${JSON.stringify({ index: startIndex, text: deletedText, type: 'delete' })}`);
+  
+      // console.log(Change detected: ${`JSON.stringify(change)}`);
+      // console.log(startIndex,endIndex)
+      // console.log(code)
+  
+      if(startIndex!=endIndex){
+        const deletedText = code.slice(startIndex, startIndex+change.rangeLength);
+        operations.push({ index: startIndex, text: deletedText, type: 'replace' });
+        // console.log(Replace operation: ${JSON.stringify({ index: startIndex, text: deletedText, type: 'replace' })});
       }
-
-      if (text) {
+      else if (text === "") { // This means something was deleted
+        const deletedText = code.slice(startIndex, endIndex+change.rangeLength);
+        operations.push({ index: startIndex, text: deletedText, type: 'delete' });
+        // console.log(Delete operation: ${JSON.stringify({ index: startIndex, text: deletedText, type: 'delete' })});
+      }
+  
+      if (text) { // This means something was inserted
         operations.push({ index: startIndex, text, type: 'insert' });
-        console.log(`Insert operation: ${JSON.stringify({ index: startIndex, text, type: 'insert' })}`);
+        // console.log(Insert operation: ${JSON.stringify({ index: startIndex, text, type: 'insert' })});
       }
     });
-
+  
     return operations;
   };
 
-  // Terminal Code
-  let ld = [...lineData];
-
-  function onInput(input) {
+  async function onInput(input) {
     if (isMultilineInput) {
       if (input.trim() === 'exec') {
-        // exec the current command
+        const headers = {
+          "authorization": localStorage.getItem("auth")
+        }
         ld.push(<TerminalInput key={ld.length}>{currentCommand}</TerminalInput>);
-        // Add your command execution logic here
+        var stdin = currentCommand.replace('run code, input=\n', '')
+        const response = await axios.post("/api/v1/rapidapi/judge",{
+          language_id: Language[CurrentLanguage].id,
+          source_code: code,
+          stdin: stdin,
+        });
+        
+        const { token } = response.data;
+        const result = await axios.get(`/api/v1/rapidapi/judge/${token}`, { headers: headers });
+        const { stdout, time, memory, stderr, compile_output } = result.data;
+        if (!stderr && !compile_output){
+          ld.push(<TerminalInput key={token}>Output:<br></br>{stdout}<br></br>Time: {time}ms,Space: {memory}kb</TerminalInput>)
+        }
+        else if(compile_output){
+          ld.push(<TerminalInput key={token}>Compile Error:<br></br>{compile_output}</TerminalInput>)
+        }
+        else{
+          ld.push(<TerminalInput key={token}>Error:<br></br>{stderr}</TerminalInput>)
+        }
         setIsMultilineInput(false);
       } else {
         // Append the input to the current command
         setCurrentCommand(currentCommand + '\n' + input);
       }
     } else {
+      const headers = {
+        "authorization": localStorage.getItem("auth")
+      }
       const command = input.trim().toLowerCase();
       if (command !== "run code, input=") {
         ld.push(<TerminalInput key={ld.length}>{input}</TerminalInput>);
       }
       if (command === 'run code') {
-        // exec the current code
-        // This will depend on what you mean by "current code"
+        const response = await axios.post("/api/v1/rapidapi/judge",{
+          language_id: Language[CurrentLanguage].id,
+          source_code: code,
+          stdin: '',
+        });
+        
+        const { token } = response.data;
+        const result = await axios.get(`/api/v1/rapidapi/judge/${token}`, { headers: headers });
+        const { stdout, time, memory, stderr, compile_output } = result.data;
+        if (!stderr && !compile_output){
+          ld.push(<TerminalInput key={token}>Output:<br></br>{stdout}<br></br>Time: {time}ms,Space: {memory}kb</TerminalInput>)
+        }
+        else if(compile_output){
+          ld.push(<TerminalInput key={token}>Compile Error:<br></br>{compile_output}</TerminalInput>)
+        }
+        else{
+          ld.push(<TerminalInput key={token}>Error:<br></br>{stderr}</TerminalInput>)
+        }
       } else if (command.startsWith('run code, input=')) {
         setIsMultilineInput(true);
         setCurrentCommand(input);
@@ -252,7 +297,7 @@ const Compiler = ({ socket, room }) => {
   return (
     <>
       {open ?
-        <div>
+        <div className='w-100'>
           <div className='d-flex'>
             <select onChange={handleLanguageChange} className='form-control w-25'>
               {Object.keys(Language).map((lang, index) => (
@@ -285,7 +330,7 @@ const Compiler = ({ socket, room }) => {
             </div>
           </div>
           <Editor
-            height="50vh"
+            height="75vh"
             theme={editortheme}
             width={editorwidth}
             path={language_details.name}
@@ -352,11 +397,11 @@ const Compiler = ({ socket, room }) => {
               "wrappingIndent": "same"
             }}
           />
-          <button onClick={() => setopen(!open)} className="btn btn-secondary" style={{ width: '70%' }}>Show/Hide Terminal</button>
+          <button onClick={() => setopen(!open)} className="btn btn-secondary">Show/Hide Terminal</button>
         </div>
         :
-        <div>
-          <div className="container">
+        <div className="my-compiler">
+          <div  className='my-terminal'>
             <Terminal
               key={inputKey} // Add key prop here
               name='Terminal'
@@ -364,11 +409,13 @@ const Compiler = ({ socket, room }) => {
               onInput={onInput}
               redBtnCallback={redBtnClick}
               yellowBtnCallback={yellowBtnClick}
-              greenBtnCallback={greenBtnClick}>
+              greenBtnCallback={greenBtnClick}
+              height='67vh'
+              >
               {lineData}
             </Terminal>
           </div>
-          <button onClick={() => setopen(!open)} className="btn btn-secondary w-100">Show/Hide Editor</button>
+          <button onClick={() => setopen(!open)} className="btn btn-secondary">Show/Hide Editor</button>
         </div>
       }
     </>

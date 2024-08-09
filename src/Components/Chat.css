@@ -1,0 +1,53 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto; /* Allows vertical scrolling */
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff; /* Background color for messages container */
+  max-height: calc(100vh - 60px); /* Adjust based on the height of the chat input container */
+}
+
+.message {
+  background-color: #ffffff; /* White background for messages */
+  border: 1px solid #ddd; /* Border around messages */
+  border-radius: 5px; /* Rounded corners */
+  margin-bottom: 5px; /* Space between messages */
+  padding: 10px; /* Padding inside messages */
+}
+
+.chat-input-container {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #f9f9f9; /* Background color for the input area */
+  border-top: 1px solid #ddd; /* Border on top of the input area */
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
+  width: 100%; /* Full width minus padding */
+  box-sizing: border-box; /* Include padding and border in the width */
+}
+
+button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Primary button color */
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker color on hover */
+}

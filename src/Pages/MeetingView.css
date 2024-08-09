@@ -1,0 +1,115 @@
+.meeting-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.vc-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.video-vc {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.join-page {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: calc(100vh - 160px);
+}
+
+.compiler-side,
+.chat-side {
+  background-color: #f9f9f9;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.compiler-side {
+  width: 75%;
+}
+
+.chat-side {
+  background-color: #f1f1f1;
+  width: 20%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.heading-meet h3 {
+  color: black;
+  margin: 20px;
+}
+
+.btn-dark {
+  margin: 20px;
+}
+
+/* Mobile and Tablet Styles */
+@media (max-width: 1024px) {
+  .join-page {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .compiler-side,
+  .chat-side {
+    width: 100%;
+    height: auto;
+  }
+
+  .video-vc {
+    width: 100%;
+  }
+}
+
+/* Specific Styles for screens up to 1016px */
+@media (max-width: 1016px) {
+  .messages {
+    max-height: 300px; /* Adjust this height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+}
+
+/* Very Small Screen Styles */
+@media (max-width: 600px) {
+  .vc-main {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .join-page {
+    padding: 10px;
+    flex-direction: column;
+  }
+
+  .compiler-side,
+  .chat-side {
+    width: 100%;
+    height: auto;
+  }
+
+  .messages {
+    max-height: 200px; /* Set a maximum height for the chat box */
+    overflow-y: auto; /* Enable vertical scrolling */
+  }
+
+  .heading-meet h3 {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
+
+  .btn-dark {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
