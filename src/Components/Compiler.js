@@ -17,6 +17,7 @@ const Compiler = ({ socket, room }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   // Terminal Code
+  var ld = []
   const [lineData, setLineData] = useState([
     <TerminalOutput key={0}>Welcome to SquadScript Terminal!!!</TerminalOutput>,
     <TerminalOutput key={1}></TerminalOutput>,
@@ -29,8 +30,6 @@ const Compiler = ({ socket, room }) => {
   const [isMultilineInput, setIsMultilineInput] = useState(false);
   const [currentCommand, setCurrentCommand] = useState('');
 
-
-  let ld = [...lineData];
 
   const editorRef = useRef(null);
   const language_details = Language[CurrentLanguage];

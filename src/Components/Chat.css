@@ -30,7 +30,7 @@
   border-top: 1px solid #ddd; /* Border on top of the input area */
 }
 
-input {
+.chat-input-container input {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 5px;

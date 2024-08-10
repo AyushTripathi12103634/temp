@@ -138,8 +138,9 @@ const Contact = () => {
                 onChange={handleContent}
               ></textarea>
               <div className="form-submit">
-                <div className="form-check mt-4">
+                <div className="contact-form-check mt-4">
                   <input
+                  
                     type="checkbox"
                     name="check"
                     onChange={handleCheck}

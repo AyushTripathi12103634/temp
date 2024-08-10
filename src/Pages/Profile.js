@@ -309,23 +309,31 @@ function Profile() {
           </div>
           {show && (
             <div className="profile-buttons">
-              <div className="buttons">
+              
                 {edit ? (
+                  <div className="profile-save-btn">
                   <button className="btn btn-dark" onClick={handlesave}>
                     Save Details
                   </button>
+                  </div>
                 ) : (
+                  <div className="profile-edit-btn">
                   <button className="btn btn-dark" onClick={handleedit}>
                     Edit Details
                   </button>
+                  </div>
                 )}
+                <div className="profile-logout-btn">
                 <button className="btn btn-danger" onClick={handlelogout}>
                   Logout
                 </button>
+                </div>
+                <div className="profile-delete-btn">
                 <button className="btn btn-danger" onClick={handledelete}>
                   Delete Profile
                 </button>
-              </div>
+                </div>
+              
             </div>
           )}
         </div>

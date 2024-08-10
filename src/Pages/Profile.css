@@ -59,26 +59,26 @@
     cursor: pointer;
 }
 
-.profile-buttons {
+
+
+.profile-buttons{
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px;
+    
+}
+.profile-logout-btn{
+margin-top:2.5%
 }
 
-.profile-buttons .buttons {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping for responsiveness */
-    gap: 10px; /* Space between buttons */
-    justify-content: center; /* Center buttons */
-}
+.profile-delete-btn{
+    margin-top:2.5%;
+    margin-left:14px;
+    }
 
 .profile-buttons .btn {
     padding: 10px 20px;
     border-radius: 8px;
     font-size: 16px;
+    
     flex: 1 1 auto; /* Allow buttons to shrink and grow */
     max-width: 200px; /* Set a max-width to prevent full-width on small screens */
 }
